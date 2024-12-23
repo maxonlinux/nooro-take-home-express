@@ -7,7 +7,7 @@ dotenv.config();
 
 const app: Express = express();
 
-const port = 3000;
+const port = 3001;
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
