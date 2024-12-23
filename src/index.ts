@@ -1,6 +1,7 @@
 import express, { Express } from "express";
 import dotenv from "dotenv";
 import routes from "./routes";
+import cors from "cors";
 
 dotenv.config();
 
@@ -9,7 +10,9 @@ const app: Express = express();
 const port = 3000;
 
 // Middleware
-app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json()); 
+app.use(cors());
 
 // Routes
 app.use("/api/todos", routes);

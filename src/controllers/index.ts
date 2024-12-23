@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { Todo } from "../types";
 import prisma from "../../prisma/client";
 import { log, validateHexColor } from "../utils";
 
@@ -36,6 +35,11 @@ const getTodo = async (req: Request, res: Response): Promise<void> => {
       },
     });
 
+    if (!todo) {
+      res.status(404).json({ message: `Todo ID ${id} not found` });
+      return;
+    }
+
     res.json({
       message: `Todo ID ${id}`,
       data: todo,
@@ -52,6 +56,7 @@ const createTodo = async (req: Request, res: Response): Promise<void> => {
 
     if (!title) {
       res.status(400).json({ message: "Title is required" });
+      return;
     }
 
     if (color) {
@@ -77,13 +82,14 @@ const createTodo = async (req: Request, res: Response): Promise<void> => {
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
     log(error);
+    return;
   }
 };
 
 const updateTodo = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    const { title, completed, color } = req.body;
+    const { title, color } = req.body;
 
     const updatedTodo = await prisma.todo.update({
       where: {
@@ -91,7 +97,6 @@ const updateTodo = async (req: Request, res: Response): Promise<void> => {
       },
       data: {
         title,
-        completed,
         color,
       },
     });
@@ -127,4 +132,29 @@ const deleteTodo = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export { getTodos, getTodo, createTodo, updateTodo, deleteTodo };
+const toggleTodo = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+    const { completed } = req.body;
+
+    if (!id) {
+      res.status(400).json({ message: "ID is required" });
+    }
+
+    await prisma.todo.update({
+      where: {
+        id: +id,
+      },
+      data: {
+        completed,
+      },
+    });
+
+    res.json({ message: `Todo ID ${id} deleted` });
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong" });
+    log(error);
+  }
+};
+
+export { getTodos, getTodo, createTodo, updateTodo, deleteTodo, toggleTodo };
