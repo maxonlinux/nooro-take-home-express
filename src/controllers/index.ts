@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import prisma from "../../prisma/client";
-import { log, validateHexColor } from "../utils";
+import { asyncHandler, validateHexColor } from "../utils";
 
-const getTodos = async (req: Request, res: Response): Promise<void> => {
-  try {
+const getTodos = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
     const todos = await prisma.todo.findMany();
 
     if (!todos) {
@@ -12,14 +12,11 @@ const getTodos = async (req: Request, res: Response): Promise<void> => {
     }
 
     res.json(todos);
-  } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
-    log(error);
   }
-};
+);
 
-const getTodo = async (req: Request, res: Response): Promise<void> => {
-  try {
+const getTodo = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
 
     if (!id) {
@@ -39,14 +36,11 @@ const getTodo = async (req: Request, res: Response): Promise<void> => {
     }
 
     res.json(todo);
-  } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
-    log(error);
   }
-};
+);
 
-const createTodo = async (req: Request, res: Response): Promise<void> => {
-  try {
+const createTodo = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
     const { title, color } = req.body;
 
     if (!title) {
@@ -67,15 +61,11 @@ const createTodo = async (req: Request, res: Response): Promise<void> => {
     });
 
     res.status(201).json(todo);
-  } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
-    log(error);
-    return;
   }
-};
+);
 
-const updateTodo = async (req: Request, res: Response): Promise<void> => {
-  try {
+const updateTodo = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
     const { title, color } = req.body;
 
@@ -90,14 +80,11 @@ const updateTodo = async (req: Request, res: Response): Promise<void> => {
     });
 
     res.json(todo);
-  } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
-    log(error);
   }
-};
+);
 
-const deleteTodo = async (req: Request, res: Response): Promise<void> => {
-  try {
+const deleteTodo = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
 
     if (!id) {
@@ -112,14 +99,11 @@ const deleteTodo = async (req: Request, res: Response): Promise<void> => {
     });
 
     res.json(todo);
-  } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
-    log(error);
   }
-};
+);
 
-const toggleTodo = async (req: Request, res: Response): Promise<void> => {
-  try {
+const toggleTodo = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
     const { completed } = req.body;
 
@@ -137,10 +121,7 @@ const toggleTodo = async (req: Request, res: Response): Promise<void> => {
     });
 
     res.json(todo);
-  } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
-    log(error);
   }
-};
+);
 
 export { getTodos, getTodo, createTodo, updateTodo, deleteTodo, toggleTodo };

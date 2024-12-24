@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); 
 app.use(cors());
 
-app.use("/api/todos", routes);
+app.use("/api/tasks", routes);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
