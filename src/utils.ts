@@ -1,3 +1,4 @@
+import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 
 // Log message with timestamp
@@ -27,3 +28,5 @@ export const asyncHandler = (
     }
   };
 };
+
+export const prisma = new PrismaClient();
