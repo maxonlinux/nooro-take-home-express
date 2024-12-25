@@ -230,7 +230,15 @@ sudo systemctl restart nginx
 
 Follow the steps in the Getting Started section to complete the setup.
 
-### 4. Install PM2 for Process Management
+### 4.Update Your Docker Container to Start Automatically
+
+You can choose from different restart policies (`always`, `unless-stopped` and `on-failure`). For details please refer to the Docker documentation.
+
+```bash
+docker update --restart unless-stopped NooroMySQL
+```
+
+### 5. Install PM2 for Process Management
 
 To ensure that your Node.js app runs continuously (even after server restarts), you'll need a process manager like PM2.
 
