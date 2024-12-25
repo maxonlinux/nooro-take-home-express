@@ -17,23 +17,23 @@ npm install
 
 ### 3. Set Up MySQL Database with Docker
 
-- Pull the latest version of MySQL
+Pull the latest version of MySQL
 
-  ```bash
-  docker pull mysql:latest
-  ```
+```bash
+docker pull mysql:latest
+```
 
-- Setup container
+Setup container
 
-  ```bash
-  docker run --name NooroMySQL -e MYSQL_ROOT_PASSWORD=nooro -e MYSQL_USER=nooro -e MYSQL_DATABASE=todo -e MYSQL_PASSWORD=nooro -p 3306:3306 -d mysql:latest
-  ```
+```bash
+docker run --name NooroMySQL -e MYSQL_ROOT_PASSWORD=nooro -e MYSQL_USER=nooro -e MYSQL_DATABASE=todo -e MYSQL_PASSWORD=nooro -p 3306:3306 -d mysql:latest
+```
 
-- Check if container is running
+Check if container is running
 
-  ```bash
-  docker ps
-  ```
+```bash
+docker ps
+```
 
 ### 4. Adjust the `DATABASE_URL` variable in `.env` file accordingly
 
