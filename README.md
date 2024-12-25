@@ -230,7 +230,7 @@ sudo systemctl restart nginx
 
 Follow the steps in the Getting Started section to complete the setup.
 
-### 4.Update Your Docker Container to Start Automatically
+### 4. Update Your Docker Container to Start Automatically
 
 You can choose from different restart policies (`always`, `unless-stopped` and `on-failure`). For details please refer to the Docker documentation.
 
