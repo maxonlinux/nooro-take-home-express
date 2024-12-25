@@ -45,21 +45,64 @@ DATABASE_URL="mysql://nooro:nooro@localhost:3306/todo"
 
 ### 5. Sync the Database Schema
 
+#### Option 1: Quick Setup (Development Only)
+
 This command will push the Prisma schema to the MySQL database
 
 > [!WARNING]  
-> For development and testing purposes only. Do not use the below commands in production
+> For development and testing purposes only. Do not use the below command in production
 
 ```bash
 npx prisma db push
+```
 
-# or
+#### Option 2: Better approach and suitable for production (using migrations)
 
+Access the MySQL instance and enter root password when prompted
+
+```bash
+docker exec -it NooroMySQL mysql -uroot -p
+```
+
+Now you have 2 ways:
+
+1. Grant CREATE permissions to your database user _(not recommended, not covered by this guide)_
+2. Manually create a shadow database _(see instructions below)_
+
+#### Manually create a shadow database
+
+```SQL
+CREATE DATABASE todo_shadow;
+```
+
+```SQL
+exit
+```
+
+Add the shadow db URL to `.env`
+
+```
+SHADOW_DATABASE_URL="mysql://root:nooro@localhost:3306/todo_shadow"
+```
+
+Modify `schema.prisma`
+
+```
+datasource db {
+  provider          = "mysql"
+  url               = env("DATABASE_URL")
++ shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+```
+
+Run migration
+
+```bash
 npx prisma migrate dev
 ```
 
 > [!NOTE]  
-> For production environments use the below command instead
+> For production environments you may want to additionally run the command below
 
 ```bash
 npx prisma migrate deploy
