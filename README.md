@@ -35,7 +35,7 @@ Check if container is running
 docker ps
 ```
 
-### 4. Adjust the `DATABASE_URL` variable in `.env` file accordingly
+### 4. Adjust the `DATABASE_URL` variable in `.env` file as follows
 
 Update the .env file with your database connection string:
 
@@ -56,7 +56,7 @@ This command will push the Prisma schema to the MySQL database
 npx prisma db push
 ```
 
-#### Option 2: Better approach and suitable for production (using migrations)
+#### Option 2: A more robust and production-ready approach (using migrations)
 
 Access the MySQL instance and enter root password when prompted
 
@@ -66,14 +66,25 @@ docker exec -it NooroMySQL mysql -uroot -p
 
 Now you have 2 ways:
 
-1. Grant CREATE permissions to your database user _(not recommended, not covered by this guide)_
+1. Grant all privileges for user `nooro` on the entire database _(not recommended, not covered by this guide)_
 2. Manually create a shadow database _(see instructions below)_
 
 #### Manually create a shadow database
 
+Create new database with name `todo_shadow`
+
 ```SQL
 CREATE DATABASE todo_shadow;
 ```
+
+Grant privileges for user `nooro` on shadow database
+
+```SQL
+GRANT ALL PRIVILEGES ON todo_shadow.* TO 'nooro'@'%';
+FLUSH PRIVILEGES;
+```
+
+Exit MySQL shell
 
 ```SQL
 exit
@@ -82,7 +93,7 @@ exit
 Add the shadow db URL to `.env`
 
 ```
-SHADOW_DATABASE_URL="mysql://root:nooro@localhost:3306/todo_shadow"
+SHADOW_DATABASE_URL="mysql://nooro:nooro@localhost:3306/todo_shadow"
 ```
 
 Modify `schema.prisma`
@@ -129,7 +140,7 @@ This guide covers only minimal and basic deployment instructions. For real produ
 
 ### 1. Configure your DNS records
 
-#### Create A record that points to ypur server IP (example below)
+#### Create A record that points to your server IP (example below)
 
 ```text
 A api 192.168.1.100
