@@ -265,3 +265,7 @@ You can view logs for your application by running
 ```bash
 pm2 logs ExpressTodoApp
 ```
+
+## Next Steps
+
+To enable an HTTPS connection with an SSL certificate, you may want to use `Let's Encrypt` with `Certbot` or route your server through a service like `Cloudflare`. These configurations are not covered in this guide. Please refer to the documentation and set them up on your own.
