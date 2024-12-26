@@ -7,7 +7,7 @@ const getTodos = asyncHandler(
     const todos = await prisma.todo.findMany();
 
     if (!todos) {
-      res.status(201).json({ message: "No todos found" });
+      res.status(204).json({ message: "No todos found" });
       return;
     }
 
@@ -69,6 +69,21 @@ const updateTodo = asyncHandler(
     const { id } = req.params;
     const { title, color } = req.body;
 
+    if (!id) {
+      res.status(400).json({ message: "ID is required" });
+      return;
+    }
+
+    if (!title) {
+      res.status(400).json({ message: "Title is required" });
+      return;
+    }
+
+    if (color && !validateHexColor(color)) {
+      res.status(400).json({ message: "Invalid color HEX" });
+      return;
+    }
+
     const todo = await prisma.todo.update({
       where: {
         id: +id,
@@ -78,6 +93,11 @@ const updateTodo = asyncHandler(
         color,
       },
     });
+
+    if (!todo) {
+      res.status(404).json({ message: `Todo ID ${id} not found` });
+      return;
+    }
 
     res.json(todo);
   }
@@ -97,6 +117,11 @@ const deleteTodo = asyncHandler(
         id: +id,
       },
     });
+
+    if (!todo) {
+      res.status(404).json({ message: `Todo ID ${id} not found` });
+      return;
+    }
 
     res.json(todo);
   }
@@ -119,6 +144,11 @@ const toggleTodo = asyncHandler(
         completed,
       },
     });
+
+    if (!todo) {
+      res.status(404).json({ message: `Todo ID ${id} not found` });
+      return;
+    }
 
     res.json(todo);
   }

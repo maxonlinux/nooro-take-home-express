@@ -277,3 +277,239 @@ pm2 logs ExpressTodoApp
 ## Next Steps
 
 To enable an HTTPS connection with an SSL certificate, you may want to use `Let's Encrypt` with `Certbot` or route your server through a service like `Cloudflare`. These configurations are not covered in this guide. Please refer to the documentation and set them up on your own.
+
+## API Usage
+
+Base URL: `/tasks`
+
+#### 1. Get All Todos
+
+Endpoint: `GET /`
+
+Fetches all todos from the database.
+
+Response:
+
+```
+200 OK: Returns an array of todo items.
+204 No Content: If no todos are found.
+```
+
+Example Response:
+
+```json
+[
+  {
+    "id": 1,
+    "title": "Buy groceries",
+    "color": "#FF5733",
+    "completed": false,
+    "createdAt": "2024-12-01T12:00:00.000Z",
+    "updatedAt": "2024-12-01T12:00:00.000Z"
+  },
+  {
+    "id": 2,
+    "title": "Walk the dog",
+    "color": "#008000",
+    "completed": true,
+    "createdAt": "2024-12-01T12:00:00.000Z",
+    "updatedAt": "2024-12-01T12:00:00.000Z"
+  }
+]
+```
+
+#### 2. Get Todo By ID
+
+Endpoint: `GET /:id`
+
+Fetches a single todo item by its ID.
+
+Parameters:
+
+`id` (Path): The ID of the todo.
+
+Response:
+
+```
+200 OK: Returns the todo item.
+400 Bad Request: If the id is not provided.
+404 Not Found: If the todo item is not found.
+```
+
+Example Response:
+
+```json
+{
+  "id": 1,
+  "title": "Buy groceries",
+  "color": "#FF5733",
+  "completed": false,
+  "createdAt": "2024-12-01T12:00:00.000Z",
+  "updatedAt": "2024-12-01T12:00:00.000Z"
+}
+```
+
+#### 3. Create a Todo
+
+Endpoint: `POST /`
+
+Creates a new todo item.
+
+Request Body:
+
+```json
+{
+  "title": "New Todo",
+  "color": "#00FF00"
+}
+```
+
+Response:
+
+```
+201 Created: Returns the created todo.
+400 Bad Request: If required fields are missing or invalid.
+```
+
+Example Response:
+
+```json
+{
+  "id": 3,
+  "title": "New Todo",
+  "color": "#00FF00",
+  "completed": false,
+  "createdAt": "2024-12-01T12:00:00.000Z",
+  "updatedAt": "2024-12-01T12:00:00.000Z"
+}
+```
+
+#### 4. Update a Todo
+
+Endpoint: `PUT /:id`
+
+Updates an existing todo item.
+
+Parameters:
+
+`id` (Path): The ID of the todo to update.
+
+Request Body:
+
+```json
+{
+  "title": "Updated Todo",
+  "color": "#123456"
+}
+```
+
+Response:
+
+```
+200 OK: Returns the updated todo.
+400 Bad Request: Missing ID or required fields are missing or invalid.
+404 Not Found: If the todo item is not found.
+```
+
+Example Response:
+
+```json
+{
+  "id": 1,
+  "title": "Updated Todo",
+  "color": "#123456",
+  "completed": false,
+  "createdAt": "2024-12-01T12:00:00.000Z",
+  "updatedAt": "2024-12-01T12:00:00.000Z"
+}
+```
+
+#### 5. Toggle Todo Completion
+
+Endpoint: `PATCH /:id`
+
+Toggles the completion status of a todo item.
+
+Parameters:
+
+`id` (Path): The ID of the todo to toggle.
+
+Request Body:
+
+```json
+{
+  "completed": true
+}
+```
+
+Response:
+
+```
+200 OK: Returns the updated todo.
+400 Bad Request: Missing ID.
+404 Not Found: If the todo item is not found.
+```
+
+Example Response:
+
+```json
+{
+  "id": 1,
+  "title": "Updated Todo",
+  "color": "#123456",
+  "completed": true,
+  "createdAt": "2024-12-01T12:00:00.000Z",
+  "updatedAt": "2024-12-01T12:00:00.000Z"
+}
+```
+
+#### 6. Delete a Todo
+
+Endpoint: `DELETE /:id`
+
+Deletes a todo item by its ID.
+
+Parameters:
+
+`id` (Path): The ID of the todo to delete.
+
+Response:
+
+```
+200 OK: Returns the deleted todo.
+400 Bad Request: Missing ID.
+404 Not Found: If the todo item is not found.
+```
+
+Example Response:
+
+```json
+{
+  "id": 1,
+  "title": "Updated Todo",
+  "color": "#123456",
+  "completed": true,
+  "createdAt": "2024-12-01T12:00:00.000Z",
+  "updatedAt": "2024-12-01T12:00:00.000Z"
+}
+```
+
+#### Error Handling
+
+All errors are returned as JSON objects with an appropriate HTTP status code and message.
+
+Error Response:
+
+```
+500 Internal Server Error: Something went wrong.
+404 Not Found: If the todo item is not found.
+400 Bad Request: Missing ID.
+```
+
+Example Error Response:
+
+```json
+{
+  "message": "Something went wrong"
+}
+```
